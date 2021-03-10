@@ -119,6 +119,5 @@ public class Laptop {
         System.out.println("OS: " + obj1.getOs());
         obj1.showNotePad("file name");
         obj1.showNotePad("file name", 59);
-
     }
 }
