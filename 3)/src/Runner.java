@@ -29,13 +29,25 @@ public class Runner {
     private double factor;
     private int allTasks;
     private int weeks;
-    private int amountOfUnit;
     private int amountOfPeople;
+    Runner(int price, double factor, int allTasks, int weeks, int amountOfPeople) {
+        this.price = price;
+        this.factor = factor;
+        this.allTasks = allTasks;
+        this.weeks = weeks;
+        this.amountOfPeople = amountOfPeople;
+    }
     public int getWeeks() {
         return weeks;
     }
     public int getPrice() {
         return price;
+    }
+    public int getAmountOfPeople() {
+        return amountOfPeople;
+    }
+    public int getAllTasks() {
+        return allTasks;
     }
     public double getFactor() {
         return factor;
@@ -46,35 +58,57 @@ public class Runner {
     public void setFactor(double factor) {
         this.factor = factor;
     }
+    public void setAllTasks(int allTasks) {
+        this.allTasks = allTasks;
+    }
+    public void setWeeks(int weeks) {
+        this.weeks = weeks;
+    }
+    public void setAmountOfPeople(int amountOfPeople) {
+        this.amountOfPeople = amountOfPeople;
+    }
+
     //1
+    //1)просрочит сдачу одной темы на T недель,
     public double salary1(int time) {
         //(X * (1 + Z)) * (1 + Z), и т.д.)
         //1)просрочит сдачу одной темы на T недель,
-        return price * (weeks - time) + price * Math.pow(1 + factor,time);
+        return price * (weeks - 1) + price * Math.pow(1 + factor,time);
     }
     //2
+    //2)просрочит сдачу N из M тем на Y недель каждая,
     public double salary2(int time, int task) {
-        return price * (weeks - time) + price * Math.pow(1 + factor, time) * task;
+        return price * (weeks - task) + price * Math.pow(1 + factor, time) * task;
     }
     //3
+    //3)не выполнит ни одной темы на T недель,
     public double salary3(int period) {
         double sum = 0;
         sum += price * (weeks - period);
-        for(; period < 0; period--) {
+        for(; period > 0; period--) {
             sum += price * Math.pow(1 + factor,period);
         }
         return sum;
     }
     //4
+    //4) по каждой теме будет иметь просрочку на неделю/Q недель
     public double salary4(int time) {
         return price * Math.pow(1 + factor, time) * allTasks;
     }
     //5
+    //Какую сумму куратор получит за всех студентов,
+    //если S студентов из общего количества студентов сделали просрочки, остальные все вовремя сдавали
     public double salary5(int time, int task, int people) {
-        return  (price * (weeks - time) + (price * Math.pow(1 + factor, time) * task)) * people +
+        return  (price * (weeks - task) + (price * Math.pow(1 + factor, time) * task)) * people +
                  price * weeks * (amountOfPeople - people);
     }
     public static void main(String[] args) {
-
+        //int price, double factor, int allTasks, int weeks, int amountOfPeople
+        Runner obj = new Runner(10, 0.05, 5, 5, 10);
+        System.out.println("1) " + obj.salary1(5));
+        System.out.println("2) " + obj.salary2(3,4));
+        System.out.println("3) " + obj.salary3(5));
+        System.out.println("4) " + obj.salary4(5));
+        System.out.println("5) " + obj.salary5(4,5,9));
     }
 }
